@@ -1,0 +1,80 @@
+ID = pD
+Title = 密碼生成器
+Tags = contest, 314, string, algo
+
+Discription = 
+>interPicture from [https://shihyu.github.io/books/apas01.html]
+生在21世紀的人類因為網路的發達，幾乎每個人都擁有許多帳戶，而這些帳戶都會有一組密碼，但如果每組帳戶的密碼都設定一模一樣，駭客只要一破解就能拿到你所有的帳號，因此我想請你寫一個密碼生成器，對每個網站生成不同的密碼。
+因為每個網站對密碼長度的規定都不一樣，但幾乎都在12碼以下，因此這個生成器生成的密碼長度就設定為12碼。
+
+密碼生成器規則：
+* 網址基本上都會包含至少一個點，例如 `youtube.com`，我們以這個點的後面這個字元 (在此例中為 `c` ) 為標記點，由前到後密碼為每個字元到此標記點的距離 (依據ASCII)，如果距離為二位數，則只取個位數。在此例中第一碼為 `y - c` 也就是 `121 - 99 = 22`，且此為二位數，只取個位數，因此第一碼為 `2`。第二碼為 `o - c` 也就是 `111 - 99 = 12`，且此為二位數，只取個位數，因此第二碼為 `2`。依此類推。
+* 為因應有些網站規定密碼必須包含大小寫英文字母，因此我們直接設定第五碼為 `A`，第六碼為 `z`。
+* 為因應有些網站規定密碼必須包含特殊字元，因此我們規定第七碼必須是 ASCII 中 Dec = 35 ~ 45，計算方法：`Dec = 35 + 密碼的第一碼`。在此例中第一碼為 `2`，因此 `Dec = 35 + 2 = 37`，也就是 `%`。
+* 其他沒有額外設定的密碼皆以第一條規則為主
+* 如果整個網址跑過後依舊未滿12碼，應回到第一碼繼續往後補齊。在此例中應為 `youtube.comy`。
+* 為避免網址輸入錯誤，我們只計入網域名稱，也就是如果輸入為 `youtu.be/PFRGWuMPx4E?feature=shared`，計入範圍應為 `youtu.be`，但又必須符合12碼，因此應改為`youtu.beyout`。
+
+Input Format = 
+輸入只有一行，一組網址。
+
+Output Format = 
+請輸出此網址的密碼。
+
+Input Sample 1 = 
+youtube.com
+
+Output Sample 1 = 
+2287Az%30202
+
+Input Sample 2= 
+youtu.be/PFRGWuMPx4E?feature=shared
+
+Output Sample 2 = 
+3398Az&33398
+
+Input Sample 3 = 
+youtu.be/xvFZjo5PgG0?feature=shared
+
+Output Sample 3 = 
+3398Az&33398
+
+TL = 1000 ms
+ML = 512 MB
+Visible = 0
+Share Submission = 0
+Type = OI
+TestData = 13
+Source = Nordra
+
+Solution = 
+
+Answer = 
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+bool comp(pair<int, int> a, pair<int, int> b){
+    int dA = a.first * a.first + a.second * a.second;
+    int dB = b.first * b.first + b.second * b.second;
+    if(dA != dB) return dA < dB;
+    else if(a.first != b.first) return a.first < b.first;
+    else return a.second < b.second;
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+    
+    pair<int, int> loc[100];
+    for(int i = 0; i < n; i++){
+        cin >> loc[i].first >> loc[i].second;
+    }
+    
+    sort(loc, loc + n, comp);
+    
+    for(int i = 0; i < m; i++){
+        cout << loc[i].first << " " << loc[i].second << "\n";
+    }
+}
+```

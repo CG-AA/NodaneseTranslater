@@ -1,0 +1,105 @@
+ID = pC
+Title = 物流司機
+Tags = contest, 313, sort
+
+Discription = 
+小K是一名物流司機，某天早上，小K知道當天共有 $N$ 個包裹在物流公司等待運送，為了避免小K疲勞駕駛，小K會選擇距離物流公司前 $M$ 近的包裹運送，並且每個包裹都必須從物流公司出發，請你排序好由進到遠並且他這天會運送到的包裹目的地。
+* 已知物流中心位於原點 $O(0, 0)$
+* 本題敘述距離皆為直線距離，定義為 $\sqrt{{x_i}^2 + {y_i}^2}$，為避免產生小數影響精準度，你可以使用距離平方做排序。
+
+Input Format = 
+輸入共有 $N+1$ 行，第一行共有兩個正整數 $N, M$，代表代運送的包裹及小K能運送多少包裹。
+接下來共有 $N$ 行，每一行有兩個整數 $x_i, y_i$，$(x_i, y_i)$ 代表包裹目的地的座標。
+
+* $1 \leq M \leq N \leq 100$
+* 保證任一座標的平方和在 `int` 範圍內
+
+其中保證：
+* 10%測資：$1 \leq M = N \leq 3$
+* 20%測資：$x_i \in \mathbb{Z} , y_i = 0$
+
+Output Format = 
+輸出共有 $M$ 行，請將小K運送的目的地座標依照運送順序列出。
+
+* 如果有距離相同者，優先排序 $x_i$ 較小者，如果 $x_i$ 相同，優先排序 $y_i$ 較小者。
+
+Input Sample 1 = 
+5 5
+2 0
+5 0
+-1 0
+-5 0
+10 0
+
+Output Sample 1 = 
+-1 0
+2 0
+-5 0
+5 0
+10 0
+
+Input Sample 2= 
+5 3
+2 0
+5 0
+-1 0
+-5 0
+10 0
+
+Output Sample 2 = 
+-1 0
+2 0
+-5 0
+
+Input Sample 3 = 
+5 3
+0 1
+5 0
+3 4
+5 2
+1 9
+
+Output Sample 3 = 
+0 1
+3 4
+5 0
+
+TL = 1000 ms
+ML = 512 MB
+Visible = 0
+Share Submission = 0
+Type = OI
+TestData = 13
+Source = Nordra
+
+Solution = 
+
+Answer = 
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+bool comp(pair<int, int> a, pair<int, int> b){
+    int dA = a.first * a.first + a.second * a.second;
+    int dB = b.first * b.first + b.second * b.second;
+    if(dA != dB) return dA < dB;
+    else if(a.first != b.first) return a.first < b.first;
+    else return a.second < b.second;
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+    
+    pair<int, int> loc[100];
+    for(int i = 0; i < n; i++){
+        cin >> loc[i].first >> loc[i].second;
+    }
+    
+    sort(loc, loc + n, comp);
+    
+    for(int i = 0; i < m; i++){
+        cout << loc[i].first << " " << loc[i].second << "\n";
+    }
+}
+```

@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "iterator": "cpp"
+    }
+}
